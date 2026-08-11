@@ -1,54 +1,27 @@
 import streamlit as st
 
-st.title("Movie Ticket Booking System")
+st.title("To do list")
+st.header("Manage your tasks")
 
-# Customer name
-name = st.text_input("Enter your name")
+if "tasks" not in st.session_state:
+    st.session_state.tasks = []
 
-# Movie selection
-movie = st.selectbox(
-    "Select your movie",
-    ["Avengers", "Dangal", "3 Idiots", "Stree 2"]
+task = st.text_input(
+    "Enter your task",
+    placeholder="eg: complete python assignment"
 )
 
-# Show time selection
-show_time = st.selectbox(
-    "Select show time",
-    ["10:00 AM", "2:00 PM", "6:00 PM", "9:00 PM"]
-)
-
-# Number of tickets
-tickets = st.number_input(
-    "Number of tickets",
-    min_value=1,
-    max_value=10,
-    value=1
-)
-
-# Ticket price
-if movie == "Avengers":
-    price = 250
-elif movie == "Dangal":
-    price = 200
-elif movie == "3 Idiots":
-    price = 180
-else:
-    price = 220
-
-# Book button
-if st.button("Book Tickets"):
-
-    if name:
-        total = price * tickets
-
-        st.success("Booking Confirmed!")
-
-        st.write(f"Hello{name}!")
-        st.write(f" Movie:{movie}")
-        st.write(f" Show Time:{show_time}")
-        st.write(f" Tickets:{tickets}")
-        st.write(f" Price per ticket:₹{price}")
-        st.write(f" Total Amount: ₹{total}")
-
+if st.button("Add task"):
+    if task.strip() == "":
+        st.warning("please enter a task")
     else:
-        st.warning("Please enter your name first.")
+        st.session_state.tasks.append(task)
+        st.success("task added")
+        st.subheader("your tasks")
+
+for i, task_item in enumerate(st.session_state.tasks, start=1):
+    st.write(f"{i}. {task_item}")
+
+    Done = st.checkbox("done", key=f"task_{i}")
+    if Done:
+        st.success("TASK COMPLETED")
